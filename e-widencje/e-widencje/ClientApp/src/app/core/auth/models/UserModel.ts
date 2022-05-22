@@ -8,6 +8,7 @@ export interface UserModel {
   password: string | undefined
   email: string
   auth?: AuthModel
+  personalId: string
 }
 
   

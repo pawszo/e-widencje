@@ -3,13 +3,14 @@ import { combineReducers } from 'redux'
 import { connect } from "react-redux";
 import * as auth from '../../app/core/auth/redux/AuthRedux'
 import * as userStore from '../../app/core/users/redux/UserRedux'
+import store from './Store';
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
   user: userStore.reducer
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof store.getState>//rootReducer>
 
 export interface IAppThunkAction<TAction> {
   (dispatch: (action: TAction) => void, getState: () => RootState): void;

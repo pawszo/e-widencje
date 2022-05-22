@@ -13,7 +13,7 @@ export class UsersMock {
   {
     const user: UserModel = {
       id: generateUserId(),
-      email: "email@email.com",
+      email: "",
       firstname: firstname,
       lastname: lastname,
       username: `${firstname}-${lastname}`,
@@ -22,6 +22,7 @@ export class UsersMock {
         accessToken: 'token-' + Math.random(),
         refreshToken: 'token-' + Math.random(),
       },
+      personalId: ""
     }
     return user
   }
@@ -36,7 +37,8 @@ export class UsersMock {
         refreshToken: 'token-d3472c7c-b415-4a04-bdb9-c4b31d8f64a9',
       },
       firstname: 'Amanda',
-      lastname: 'Glenn'
+      lastname: 'Glenn',
+      personalId: "11111111111"
     },
     {
       id: 2,
@@ -49,6 +51,7 @@ export class UsersMock {
       },
       firstname: 'Pamela',
       lastname: 'Chambers',
+      personalId: "22222222222"
     },
     {
       id: 3,
@@ -61,6 +64,7 @@ export class UsersMock {
       },
       firstname: 'Sarah',
       lastname: 'Lindsay',
+      personalId: "33333333333"
     },
   ]
 }

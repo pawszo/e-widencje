@@ -20,7 +20,7 @@ const Pagination = (props: IProps) => {
         <>
             <ul className="pagination pagination-sm">
                 {props.currentPage !== 1 &&
-                    <li key="prev" className="page-item" ><button className="page-link" onClick={() => change(props.currentPage - 1)} >Prev</button></li>
+                    <li key="prev" className="page-item" ><button className="page-link" onClick={() => change(props.currentPage - 1)} >Poprzednia strona</button></li>
                 }
 
                 {pages.map((page, index: number) => (
@@ -28,7 +28,7 @@ const Pagination = (props: IProps) => {
                 ))}
 
                 {props.currentPage !== total &&
-                    <li key="next" className="page-item"><button className="page-link" onClick={() => change(props.currentPage + 1)} >Next</button></li>
+                    <li key="next" className="page-item"><button className="page-link" onClick={() => change(props.currentPage + 1)} >Kolejna strona</button></li>
                 }
             </ul>
         </>

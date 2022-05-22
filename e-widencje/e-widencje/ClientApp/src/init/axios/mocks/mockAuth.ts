@@ -48,6 +48,7 @@ export function mockAuth(mock: MockAdapter) {
           accessToken: 'token-' + Math.random(),
           refreshToken: 'token-' + Math.random(),
         },
+        personalId: "01020312345"
       }
 
       UsersMock.table.push(user)
@@ -122,6 +123,7 @@ export function mockAuth(mock: MockAdapter) {
         accessToken: 'token-' + Math.random(),
         refreshToken: 'token-' + Math.random(),
       },
+      personalId: "12345678910"
     }
     return [200., user]
   })

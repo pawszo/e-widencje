@@ -29,7 +29,7 @@ const UserPage = (props: Props) => {
     const [state, setState] = useState({
         search: "",
         currentNum: 1,
-        limitPerPage: 1,
+        limitPerPage: 10,
         isAddModalOpen: false,
         isDeleteModalOpen: false,
         isUpdateModalOpen: false,
@@ -90,7 +90,7 @@ const UserPage = (props: Props) => {
                     <div className="col-3 col-sm-2 col-md-2 col-lg-1">
                         <button className="btn btn-outline-light me-2"
                             onClick={x => toggleAddUserModal()}
-                            type="submit">Add</button>
+                            type="submit">Dodaj</button>
                     </div>
                     <div className="col-9 col-sm-10 col-md-10 col-lg-11">
                         <input
@@ -98,7 +98,7 @@ const UserPage = (props: Props) => {
                             className="form-control"
                             defaultValue={""}
                             onChange={onChangeSearchInput}
-                            placeholder={"Search for user..."}
+                            placeholder={"Wyszukaj..."}
                         />
                     </div>
                 </div>
@@ -107,7 +107,11 @@ const UserPage = (props: Props) => {
             <table className="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th scope="col">First Name</th><th scope="col" >Last Name</th><th scope="col" ></th>
+                        <th scope="col">Imię</th>
+                        <th scope="col" >Nazwisko</th>
+                        <th scope="col" >Pesel</th>
+                        <th scope="col" >Email</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,9 +121,11 @@ const UserPage = (props: Props) => {
                             <tr key={User.id}>
                                 <td>{User.firstname}</td>
                                 <td>{User.lastname}</td>
+                                <td>{User.personalId}</td>
+                                <td>{User.email}</td>
                                 <td>
-                                    <button type="button" className="btn btn-outline-primary me-2" onClick={x => toggleUpdateUserModal(User)}>Edit</button>
-                                    <button type="button" className="btn btn-outline-secondary me-2" onClick={x => toggleDeleteUserModal(User)}>Delete</button>
+                                    <button type="button" className="btn btn-outline-primary me-2" onClick={x => toggleUpdateUserModal(User)}>Edytuj</button>
+                                    <button type="button" className="btn btn-outline-secondary me-2" onClick={x => toggleDeleteUserModal(User)}>Deaktywuj</button>
                                 </td>
                             </tr>
                         )
@@ -136,8 +142,8 @@ const UserPage = (props: Props) => {
                                         {renderEditor()}
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button variant="secondary" onClick={x => toggleAddUserModal()}>Close</Button>
-                                        <Button variant="primary" type="submit" onClick={x => handleSubmit()}>Save changes</Button>
+                                        <Button variant="secondary" onClick={x => toggleAddUserModal()}>Zamknij</Button>
+                                        <Button variant="primary" type="submit" onClick={x => handleSubmit()}>Zapisz zmiany</Button>
                                     </Modal.Footer>
                                 </>
                             }
@@ -156,8 +162,8 @@ const UserPage = (props: Props) => {
                                         {renderEditor()}
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button variant="secondary" onClick={x => toggleUpdateUserModal()}>Close</Button>
-                                        <Button variant="primary" type="submit" onClick={x => handleSubmit()}>Save changes</Button>
+                                        <Button variant="secondary" onClick={x => toggleUpdateUserModal()}>Zamknij</Button>
+                                        <Button variant="primary" type="submit" onClick={x => handleSubmit()}>Zapisz zmiany</Button>
                                     </Modal.Footer>
                                 </>
                             }
@@ -166,10 +172,10 @@ const UserPage = (props: Props) => {
 
                     <Modal show={state.isDeleteModalOpen} onHide={() => toggleDeleteUserModal()}>
                         <Modal.Header >
-                            <Modal.Title>Delete user: {state.modelForEdit ? `${state.modelForEdit.firstname} ${state.modelForEdit.lastname}` : null}</Modal.Title>
+                            <Modal.Title>Deaktywuj użytkownika: {state.modelForEdit ? `${state.modelForEdit.firstname} ${state.modelForEdit.lastname}` : null}</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <p>Do you want to delete this user?</p>
+                            <p>Czy chcesz deaktywować tego użytkownika?</p>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={x => toggleDeleteUserModal()}>Close</Button>

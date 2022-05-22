@@ -1,4 +1,4 @@
-//Created by Vladyslav Kozhemiachenko
+//Created by Paweł Szołtysek
 import ReactDOM from 'react-dom'
 import {PersistGate} from 'redux-persist/integration/react'
 import {Provider} from 'react-redux'
