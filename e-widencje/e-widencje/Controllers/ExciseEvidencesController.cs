@@ -57,7 +57,7 @@ namespace e_widencje.Controllers
                 return BadRequest();
             }
 
-            var updatedEvidence = await _repository.Update(exciseEvidence);
+            var updatedEvidence = await _repository.Update(id, exciseEvidence);
 
             if (updatedEvidence == null)
                 return NotFound();
@@ -70,31 +70,11 @@ namespace e_widencje.Controllers
         [HttpPost]
         public async Task<ActionResult<ExciseEvidence>> PostExciseEvidence(ExciseEvidence exciseEvidence)
         {
-            _context.ExciseEvidences.Add(exciseEvidence);
-            await _context.SaveChangesAsync();
+            var addedEvidence = await _repository.Add(exciseEvidence);
+            if (addedEvidence == null)
+                return BadRequest();
 
-            return CreatedAtAction("GetExciseEvidence", new { id = exciseEvidence.Id }, exciseEvidence);
-        }
-
-        // DELETE: api/ExciseEvidences/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExciseEvidence(int id)
-        {
-            var exciseEvidence = await _context.ExciseEvidences.FindAsync(id);
-            if (exciseEvidence == null)
-            {
-                return NotFound();
-            }
-
-            _context.ExciseEvidences.Remove(exciseEvidence);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ExciseEvidenceExists(int id)
-        {
-            return _context.ExciseEvidences.Any(e => e.Id == id);
+            return CreatedAtAction("GetExciseEvidence", new { id = addedEvidence.Id }, addedEvidence);
         }
     }
 }

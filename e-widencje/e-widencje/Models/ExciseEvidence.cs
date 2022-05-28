@@ -6,6 +6,8 @@ namespace e_widencje.Models
     public class ExciseEvidence : IEntity
     {
         public int Id { get; set; }
+        public DateTime LastUpdate { get; set; }
+        public int LastEditorId { get; set; }
 
         [Required]
         public string ProductName { get; set; }
@@ -14,11 +16,11 @@ namespace e_widencje.Models
         public string CommodityCode { get; set; }
 
         [Required]
-        public decimal Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         public string Unit { get; set; }
 
-        public DateTime DateOfShipment { get; set; }
+        public DateTime? DateOfShipment { get; set; }
 
         public string HandOverAddress { get; set; }
 
@@ -27,12 +29,14 @@ namespace e_widencje.Models
         public string InternalShipmentDocumentId { get; set; }
 
         [Required]
-        public DateTime DocumentDate { get; set; }
+        public DateTime? DocumentDate { get; set; }
 
         public string MonthlySummaryPropan { get; set; }
 
         public string MonthlySummaryButan { get; set; }
 
         public string ExtraDetails { get; set; }
+
+        
     }
 }

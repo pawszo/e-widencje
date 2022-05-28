@@ -1,22 +1,32 @@
 ﻿using e_widencje.Contexts;
 using e_widencje.Models;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace e_widencje.Repositories
 {
     public class ExciseEvidenceRepository : RepositoryBase<ExciseEvidence, MainDbContext>
     {
-        public ExciseEvidenceRepository(MainDbContext context) : base(context)
+        public ExciseEvidenceRepository(MainDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
 
         public override Task<ExciseEvidence> Delete(int id) => null;
 
-        public override async Task<ExciseEvidence> Update(ExciseEvidence evidenceUpdate)
+        public override async Task<ExciseEvidence> Update(int id, ExciseEvidence evidenceUpdate)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return entity;
+            var currentEvidence = await Get(id);
+            if (currentEvidence is null)
+                return null;
+
+            ApplyUpdates(currentEvidence, evidenceUpdate);
+            var newEvidenceVersion = await Add(currentEvidence);
+
+            if (newEvidenceVersion == null)
+                return null;
+
+            return newEvidenceVersion;
+
         }
     }
 }

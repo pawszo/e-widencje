@@ -1,12 +1,13 @@
 ﻿using e_widencje.Contexts;
 using e_widencje.Models;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace e_widencje.Repositories
 {
     public class UserRepository : RepositoryBase<User, MainDbContext>
     {
-        public UserRepository(MainDbContext context) : base(context)
+        public UserRepository(MainDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
 
@@ -17,7 +18,7 @@ namespace e_widencje.Repositories
             if (user is null) return null;
 
             user.IsActive = false;
-            return await Update(user);
+            return await Update(id, user);
         }
     }
 }
