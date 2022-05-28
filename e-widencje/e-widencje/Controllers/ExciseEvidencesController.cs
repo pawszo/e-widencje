@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using e_widencje.Contexts;
 using e_widencje.Models;
+using e_widencje.Repositories;
 
 namespace e_widencje.Controllers
 {
@@ -14,63 +14,55 @@ namespace e_widencje.Controllers
     [ApiController]
     public class ExciseEvidencesController : ControllerBase
     {
-        private readonly MainDbContext _context;
+        private readonly IRepository<ExciseEvidence> _repository;
 
-        public ExciseEvidencesController(MainDbContext context)
+        public ExciseEvidencesController(IRepository<ExciseEvidence> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/ExciseEvidences
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExciseEvidence>>> GetExciseEvidences()
         {
-            return await _context.ExciseEvidences.ToListAsync();
+            var evidences = await _repository.GetAll();
+
+            if (evidences == null)
+                return NotFound();
+
+            return Ok(evidences);
         }
 
         // GET: api/ExciseEvidences/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ExciseEvidence>> GetExciseEvidence(int id)
         {
-            var exciseEvidence = await _context.ExciseEvidences.FindAsync(id);
+            var exciseEvidence = await _repository.Get(id);
 
             if (exciseEvidence == null)
             {
                 return NotFound();
             }
 
-            return exciseEvidence;
+            return Ok(exciseEvidence);
         }
 
         // PUT: api/ExciseEvidences/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExciseEvidence(int id, ExciseEvidence exciseEvidence)
+        public async Task<ActionResult<ExciseEvidence>> PutExciseEvidence(int id, ExciseEvidence exciseEvidence)
         {
             if (id != exciseEvidence.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(exciseEvidence).State = EntityState.Modified;
+            var updatedEvidence = await _repository.Update(exciseEvidence);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExciseEvidenceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (updatedEvidence == null)
+                return NotFound();
 
-            return NoContent();
+            return Ok(updatedEvidence);
         }
 
         // POST: api/ExciseEvidences

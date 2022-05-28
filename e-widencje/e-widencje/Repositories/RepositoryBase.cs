@@ -1,6 +1,7 @@
 ﻿using e_widencje.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace e_widencje.Repositories
@@ -41,8 +42,13 @@ namespace e_widencje.Repositories
 
         public async Task<IEnumerable<TEntity>> GetAll() => await _context.Set<TEntity>().ToListAsync();
 
-        public async Task<TEntity> Update(TEntity entity)
+        public virtual async Task<TEntity> Update(int id, TEntity entity)
         {
+            var entityToUpdate = await _context.Set<TEntity>().FirstOrDefaultAsync(p => p.Id == id);
+            if (entityToUpdate == null)
+                return null;
+
+            var fields = entity.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return entity;

@@ -11,5 +11,12 @@ namespace e_widencje.Repositories
         }
 
         public override Task<ExciseEvidence> Delete(int id) => null;
+
+        public override async Task<ExciseEvidence> Update(ExciseEvidence evidenceUpdate)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return entity;
+        }
     }
 }
