@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { EwidencjaAkcyzowaModel } from "../models/EwidencjaAkcyzowaModel"
+import { ExciseEvidence } from "../models/ExciseEvidence"
 
 let API_URL = process.env.REACT_APP_API_URL || 'api'
 
@@ -17,9 +17,9 @@ export async function search(term: string) {
 export async function get(id: string) {
     return await axios.get(`${GET_DOCUMENT}/${id}`)
 }
-export async function update(model: EwidencjaAkcyzowaModel) {
+export async function update(model: ExciseEvidence) {
     return await axios.put(`${UPDATE_DOCUMENT}/${model.id}`, model)
 }
-export async function add(model: EwidencjaAkcyzowaModel) {
+export async function add(model: ExciseEvidence) {
     return await axios.post(`${ADD_DOCUMENT}`, model)
 }

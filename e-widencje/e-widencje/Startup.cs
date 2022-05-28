@@ -1,4 +1,5 @@
-﻿using e_widencje.Services;
+﻿using e_widencje.Contexts;
+using e_widencje.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_widencje
 {
@@ -25,6 +27,8 @@ namespace e_widencje
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<MainDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("MainContext")));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -43,6 +47,12 @@ namespace e_widencje
                 Configuration.GetSection("TokenConfigurations"))
                     .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
+
+            // postgres identity - not needed for now
+            /*services.AddIdentity<User, IdentityRole<long>>()
+                .AddEntityFrameworkStores<ApplicationDbContext, long>()
+                .AddDefaultTokenProviders();
+            */
 
 
             services.AddAuthentication(authOptions =>

@@ -1,4 +1,4 @@
-export interface EwidencjaAkcyzowaModel {
+export interface ExciseEvidence {
   id: number
   productName: string
   commodityCode: string
