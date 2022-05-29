@@ -31,3 +31,6 @@ ops/*.retry
 # IDE
 .idea/
 .vs/
+/e-widencje/certificates/my-site.crt
+/e-widencje/certificates/my-site.key
+/e-widencje/certificates/my-site.pfx
