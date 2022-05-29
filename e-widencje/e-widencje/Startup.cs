@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace e_widencje
 {
@@ -26,15 +27,16 @@ namespace e_widencje
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+            services.AddControllers();
 
             services.AddDbContext<MainDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("MainContext")));
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            /*services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
-            });
+            });*/
 
 
             services.AddScoped<ITokenService, TokenService>();
@@ -77,6 +79,10 @@ namespace e_widencje
                     .RequireAuthenticatedUser().Build());
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,9 +99,14 @@ namespace e_widencje
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -111,7 +122,7 @@ namespace e_widencje
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
+            /*app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
 
@@ -120,6 +131,7 @@ namespace e_widencje
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+            */
         }
     }
 }
