@@ -1,0 +1,4 @@
+﻿FROM postgres:14.1-alpine
+ENV PG_PASSWORD password
+ENV PG_DB test-db
+# COPY world.sql /docker-entrypoint-initdb.d/

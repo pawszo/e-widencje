@@ -7,16 +7,16 @@ ENV ASPNETCORE_URLS=http://*:5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["e-widencje/e-widencje.csproj", "e-widencje/"]
-RUN dotnet restore "e-widencje/e-widencje.csproj"
+COPY ["e-widencje.Api/e-widencje.Api.csproj", "e-widencje.Api/"]
+RUN dotnet restore "e-widencje.Api/e-widencje.Api.csproj"
 COPY . .
-WORKDIR /src/e-widencje
-RUN dotnet build e-widencje.csproj -c Release -o /app/build
+WORKDIR "/src/e-widencje.Api"
+RUN dotnet build "e-widencje.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "e-widencje.csproj" -c Release -o /app/publish
+RUN dotnet publish "e-widencje.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "e-widencje.dll"]
+ENTRYPOINT ["dotnet", "e-widencje.Api.dll"]

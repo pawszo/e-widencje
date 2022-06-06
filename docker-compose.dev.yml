@@ -1,0 +1,91 @@
+version: '3.4'
+
+services:
+
+  test-db:
+    build:
+      
+    #command: -c ssl=on -c ssl_cert_file=my-site.crt -c ssl_key_file=my-site.key
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test-db
+    volumes: 
+      - db:/var/lib/postgresql/data
+    depends_on:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ps_it@yahoo.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:5050"
+    depends_on:
+      - test-db
+#    
+#    networks:
+#      - test-network
+
+  api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://*:5000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: test-db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./e-widencje.Api:/app
+#      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+#      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+#    image: ${DOCKER_REGISTRY-}e-widencje
+    build:
+      context: "../../e-widencje.Api"
+      dockerfile: ../e-widencje.Infrastructure/api/Dockerfile.dev
+    restart: always
+    depends_on:
+      - test-db
+    links:
+      - test-db
+
+  client:
+    ports:
+      - "5001:5001"
+    depends_on:
+      - api
+    build:
+      context: ../../e-widencje.WebClient
+      dockerfile: ../e-widencje.Infrastructure/webclientrr/Dockerfile.dev
+    restart: always
+    volumes:
+      - /client/node_modules
+      - ./e-widencje/ClientApp:/client
+
+  proxy:
+    depends_on:
+      - api
+      - client
+      - test-db
+      - db-admin
+#    image: nginx:mainline
+#    volumes:
+#      -  ./nginx.conf:/etc/nginx/nginx.conf
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+
+volumes:
+  db:
+    driver: local
