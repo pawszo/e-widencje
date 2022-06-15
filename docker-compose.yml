@@ -50,9 +50,9 @@ services:
 #      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 #    image: ${DOCKER_REGISTRY-}e-widencje
     build:
-      context: ./Ewidencje.Api
+      context: .
       #dockerfile: ..\Ewidencje.Setup\api\Dockerfile.dev
-      dockerfile: Dockerfile.dev
+      dockerfile: Ewidencje.Api\Dockerfile
     restart: always
     depends_on:
       - test-db
